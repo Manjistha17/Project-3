@@ -87,7 +87,7 @@ jobs:
             keys: [backend-scan]
       - run:
           name : scan backend
-          command: 
+          command: |
             cd backend
             npm audit fix --audit-level=critical --force
 
