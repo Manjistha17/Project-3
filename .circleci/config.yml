@@ -1,5 +1,6 @@
 version: 2.1
-           
+orbs:
+  slack: circleci/slack@4.1           
 jobs:
   build-frontend:
     docker:
@@ -86,9 +87,9 @@ jobs:
             keys: [backend-scan]
       - run:
           name : scan backend
-          command: |
+          command: 
             cd backend
-            npm audit fix --audit-level=critical --forc
+            npm audit fix --audit-level=critical --force
 
 workflows:
   default:
