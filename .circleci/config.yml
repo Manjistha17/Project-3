@@ -74,6 +74,7 @@ jobs:
           name : scan frontend
           command:
             cd frontend
+            npm install
             npm audit fix --force
 
   scan-backend:
