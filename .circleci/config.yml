@@ -72,10 +72,9 @@ jobs:
             keys: [frontend-scan]
       - run:
           name : scan frontend
-          command:
+          command: |
             cd frontend
-            npm install
-            npm audit fix --force
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -86,9 +85,9 @@ jobs:
             keys: [backend-scan]
       - run:
           name : scan backend
-          command:
+          command: |
             cd backend
-            npm audit fix --force   
+            npm audit --audit-level=critical
 
 workflows:
   default:
