@@ -137,9 +137,11 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            BACKEND_IP=$(aws cloudformation describe-stacks --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" --query "Stacks[0].Outputs[?OutputKey=='BackendIP'].OutputValue" --output text)
-            echo "[backend]" > .circleci/ansible/inventory.txt
-            echo "backend ansible_host=$BACKEND_IP" >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text >> inventory
+            cat inventory
           when: on_success
       - persist_to_workspace:
           root: .
