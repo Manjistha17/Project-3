@@ -1,5 +1,5 @@
 ---
-  ---
+
 - name: Install Python for Ansible
   raw: apt-get update && apt-get install -y python3-pip
   become: true
