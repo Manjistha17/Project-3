@@ -5,18 +5,15 @@ commands:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
       WORKFLOW_ID:
-        description: CircleCI workflow ID
         type: string
-  steps:
+    steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            # Destroy back-end stack
             aws cloudformation delete-stack --stack-name "udapeople-backend-${WORKFLOW_ID:0:7}"
-            # Destroy front-end stack
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${WORKFLOW_ID:0:7}"
-            exit 1
+            exit 0
 
 jobs:
   build-frontend:
