@@ -151,7 +151,7 @@ jobs:
         
   configure-infrastructure:
     docker:
-      - image: python
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
@@ -167,10 +167,7 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail                        
+            ansible-playbook -i inventory.txt configure-server.yml                      
 
 workflows:
   default:
