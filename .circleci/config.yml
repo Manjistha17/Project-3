@@ -106,7 +106,8 @@ jobs:
             npm audit fix --audit-level=critical --force
 
   deploy-infrastructure:
-    docker: amazon/aws-cli
+    docker:
+      - image: amazon/aws-cli
       # Docker image here that supports AWS CLI
     steps:
       - checkout
