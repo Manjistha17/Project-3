@@ -105,7 +105,7 @@ jobs:
           command: |
             cd backend
             npm audit fix --audit-level=critical --force
-
+     
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -140,12 +140,16 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople" \
-              --output text >> ./inventory
+              --output text >> inventory
          
       - persist_to_workspace:
           root: .
           paths:
             - .circleci/ansible/inventory
+
+      - attach_workspace:
+          at: .      
+      - 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail  
@@ -188,6 +192,7 @@ workflows:
           filters:
             branches:
               only: [master]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]       
+      #- configure-infrastructure:
+      #    requires: [deploy-infrastructure]  
+           
       
