@@ -175,8 +175,6 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory configure-server.yml -vvv  
 
-      - debug:
-          var: error_variable
                           
 
 workflows:

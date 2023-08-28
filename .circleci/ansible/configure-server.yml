@@ -15,7 +15,12 @@
   
 
   roles:
-    - configure-server      
+    - configure-server  
+
+  tasks:
+    - name: Debug Task
+      debug:
+        var: error_var      
 
 
   # Get the environment variables from CircleCI and add to the EC2 instance
