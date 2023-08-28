@@ -151,7 +151,7 @@ jobs:
           name: Display inventory.txt content
           command: |
             echo "File Path: $PWD/inventory.txt"
-            cat inventory.txt       
+            cat inventory.txt > .circleci/ansible/inventory.txt      
 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
