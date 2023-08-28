@@ -141,7 +141,12 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> /root/project/.circleci/ansible/inventory.txt 2>&1
+              --output text >> inventory.txt 2>&1
+
+      - run:
+          name: Move inventory.txt to .circleci/ansible
+          command: |
+            mv /root/project/inventory.txt .circleci/ansible/inventory.txt        
        
          
       - persist_to_workspace:
@@ -155,9 +160,9 @@ jobs:
             echo "File Path: $PWD/inventory.txt"
             cat inventory.txt   
 
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail  
+      #- destroy-environment:
+          #id: ${CIRCLE_WORKFLOW_ID:0:7}
+          #when: on_fail  
         
   configure-infrastructure:
     docker:
