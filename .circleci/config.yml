@@ -173,7 +173,11 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory configure-server.yml                      
+            ansible-playbook -i inventory configure-server.yml -vvv  
+
+      - debug:
+          var: error_variable
+                          
 
 workflows:
   default:
