@@ -140,12 +140,16 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople" \
-              --output text >> inventory.txt
+              --output text >> inventory.txt 2>&1
          
       - persist_to_workspace:
           root: .circleci/ansible/  
           paths:
             - inventory.txt  
+
+      - run:
+          name: Display inventory.txt content
+          command: cat inventory.txt      
 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
