@@ -145,7 +145,7 @@ jobs:
 
       - store_artifacts:
           path: /root/project/inventory.txt
-          destination: inventory               
+          destination: .circleci/ansible               
        
       - persist_to_workspace:
           root: .  
