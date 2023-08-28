@@ -143,26 +143,16 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
                 echo $BACKEND_IP >> ./.circleci/ansible/inventory 
-                cat ./.circleci/ansible/inventory
-
-      #- store_artifacts:
-          #path: /root/project/inventory.txt
-          #destination: .circleci/ansible               
+                cat ./.circleci/ansible/inventory              
        
       - persist_to_workspace:
           root: .  
           paths:
             - .circleci/ansible/inventory
 
-      #- run:
-          #name: Display inventory.txt content
-          #command: |
-         #   echo "File Path: $PWD/inventory.txt"
-             
-
-      #- destroy-environment:
-          #id: ${CIRCLE_WORKFLOW_ID:0:7}
-          #when: on_fail  
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail  
         
   configure-infrastructure:
     docker:
@@ -202,7 +192,7 @@ workflows:
           filters:
             branches:
               only: [master]
-      #- configure-infrastructure:
-      #    requires: [deploy-infrastructure]  
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]  
            
       
