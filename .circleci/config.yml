@@ -167,13 +167,15 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            apk add openssh-client
             ansible --version
 
       - run:
           name: Configure server
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory configure-server.yml -vvv  
+          #  ansible-playbook -i inventory configure-server.yml -vvv 
+            ansible-playbook -vvvv -i inventory -c ssh configure-server.yml 
 
                           
 
