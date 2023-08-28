@@ -150,7 +150,7 @@ jobs:
       - persist_to_workspace:
           root: .  
           paths:
-            - .circleci/ansible/inventory.txt  
+            - inventory.txt  
 
       - run:
           name: Display inventory.txt content
