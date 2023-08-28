@@ -141,18 +141,12 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> inventory.txt 2>&1
-
-      - run:
-          name: Move inventory.txt to .circleci/ansible
-          command: |
-            mv /root/project/inventory.txt .circleci/ansible/inventory.txt        
+              --output text >> .circleci/inventory.txt 2>&1      
        
-         
-      - persist_to_workspace:
-          root: .  
-          paths:
-            - circleci/ansible/inventory.txt  
+      #- persist_to_workspace:
+          #root: .  
+          #paths:
+            #- circleci/ansible/inventory.txt  
 
       - run:
           name: Display inventory.txt content
