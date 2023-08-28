@@ -166,6 +166,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk update
             apk add --update ansible
             apk add openssh-client
             ansible --version
