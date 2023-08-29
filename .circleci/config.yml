@@ -205,7 +205,16 @@ jobs:
               then
                 echo "insecure" >> ~/.curlrc
                 curl https://kvdb.io/UafN7LHaBAQ7N5bNtXHfbj/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-              fi       
+              fi  
+
+  check-workspace-content:
+    docker:
+      - image: circleci/node:14.17.6
+    steps:
+      - checkout
+      - run:
+          name: Check Workspace Content
+          command: ls -R                 
 
   deploy-frontend:
     docker:
@@ -270,7 +279,8 @@ workflows:
           requires: [deploy-infrastructure]  
       - run-migrations:
           requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]        
+      - check-workspace-content  
+          requires: [configure-infrastructure]  
+             
            
       
