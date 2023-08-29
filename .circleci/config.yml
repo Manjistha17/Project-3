@@ -214,11 +214,7 @@ jobs:
       - checkout
       - run:
           name: Check Workspace Content
-          command: |
-            echo "Path to inventory file:"
-            echo "./inventory"
-            echo "Contents of inventory file:"
-            cat ./inventory
+          command: ls -R
                            
 
   deploy-frontend:
@@ -245,8 +241,8 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            echo $(cat ./inventory | sed 1d)
-            export BACKEND_IP=$(cat ./inventory | sed 1d)
+            echo $(cat ./.circleci/ansible/inventory | sed 2d)
+            export BACKEND_IP=$(cat ./.circleci/ansible/inventory | sed 2d)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
@@ -259,7 +255,27 @@ jobs:
 workflows:
   default:
     jobs:
-      - check-workspace-content
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]  
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]  
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]  
       
              
            
