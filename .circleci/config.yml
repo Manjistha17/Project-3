@@ -204,8 +204,41 @@ jobs:
               if grep -q "has been executed successfully." ~/project/backend/migrations_log.txt
               then
                 echo "insecure" >> ~/.curlrc
-                curl https://kvdb.io/4Cyqr1aCzbMHdLwfuucWPZ/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-              fi                        
+                curl https://kvdb.io/XxBcBNhfFbtVNeqcJ6byw5/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              fi       
+
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum -y install tar gzip
+
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(cat ./.circleci/ansible/inventory | sed 1d)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
+            cat frontend/.env    
+
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive    
+      
+                                    
 workflows:
   default:
     jobs:
@@ -227,6 +260,8 @@ workflows:
       - configure-infrastructure:
           requires: [deploy-infrastructure]  
       - run-migrations:
-          requires: [configure-infrastructure]    
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]        
            
       
