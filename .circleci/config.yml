@@ -166,9 +166,13 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk update
-            apk add --update ansible openssh
-            ansible --version
+            yum update
+            yum install -y tar gzip unzip
+            yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+            yum -y install ansible
+            
+      - attach_workspace:
+          at: ~/      
 
       - run:
           name: Configure server
