@@ -214,7 +214,12 @@ jobs:
       - checkout
       - run:
           name: Check Workspace Content
-          command: ls -R                 
+          command: |
+            echo "Path to inventory file:"
+            find . -name "inventory" -print
+            echo "Contents of inventory file:"
+            cat $(find . -name "inventory")
+                           
 
   deploy-frontend:
     docker:
@@ -240,47 +245,22 @@ jobs:
       - run:
           name: Get backend url
           command: |
+            echo $(cat ./inventory | sed 1d)
             export BACKEND_IP=$(cat ./inventory | sed 1d)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
             cat frontend/.env    
 
-      - run:
-          name: Deploy frontend objects
-          command: |
-            cd frontend
-            npm install
-            npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            aws s3 cp artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --recursive 
+      
 
 
                                     
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]  
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]  
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]  
+      - check-workspace-content
+      
              
            
       
