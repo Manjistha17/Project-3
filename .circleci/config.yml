@@ -139,11 +139,12 @@ jobs:
           command: |
               echo -e "[web]\n" > ./.circleci/ansible/inventory  
               BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text)
-                echo $BACKEND_IP >> ./.circleci/ansible/inventory 
-                cat ./.circleci/ansible/inventory              
+                --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --output text)
+              echo "bla"
+              echo $BACKEND_IP >> ./.circleci/ansible/inventory 
+              cat ./.circleci/ansible/inventory              
        
       - persist_to_workspace:
           root: .  
