@@ -247,9 +247,10 @@ jobs:
             cat inventory
             echo $(cat inventory)
             echo $(pwd)
-            export BACKEND_IP=$(inventory | sed 2d)
+            export BACKEND_IP=$(cat inventory | sed -n '2p')
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
+            mkdir -p frontend
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
             cat frontend/.env    
 
