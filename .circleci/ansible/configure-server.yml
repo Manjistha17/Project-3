@@ -13,7 +13,7 @@
     - ansible_connection: ssh
     - ansible_stdout_callback: yaml
 
-   pre_tasks:
+  pre_tasks:
 
     - name: "install python for Ansible."
       become: true
