@@ -218,8 +218,15 @@ jobs:
           command: |
             yum -y install tar gzip
 
+        # Attach workspace to have access to previously set environment variables
       - attach_workspace:
           at: ~/
+
+      - run:
+          name: Install Node.js and npm
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+            yum install -y nodejs
 
       - run:
           name: Get backend url
@@ -230,18 +237,16 @@ jobs:
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
             cat frontend/.env    
 
-      - image: circleci/node:14.17.6  # Node.js image
-        steps:
-          - run:
-              name: Install frontend dependencies
-              command: |
-                cd frontend
-                npm install
-                npm run build
-                tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-                aws s3 cp artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --recursive 
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --recursive 
 
-      
+
                                     
 workflows:
   default:
