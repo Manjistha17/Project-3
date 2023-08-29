@@ -245,9 +245,9 @@ jobs:
           command: |
             cd .circleci/ansible
             cat inventory
-            echo $(cat inventory | sed 2d)
-            echo "$(pwd)"
-            export BACKEND_IP=$(ansible/inventory | sed 2d)
+            echo $(cat inventory)
+            echo $(pwd)
+            export BACKEND_IP=$(inventory | sed 2d)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
