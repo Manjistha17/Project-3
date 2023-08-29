@@ -216,9 +216,9 @@ jobs:
           name: Check Workspace Content
           command: |
             echo "Path to inventory file:"
-            find . -name "inventory" -print
+            echo "./inventory"
             echo "Contents of inventory file:"
-            cat $(find . -name "inventory")
+            cat ./inventory
                            
 
   deploy-frontend:
