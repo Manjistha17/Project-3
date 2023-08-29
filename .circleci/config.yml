@@ -178,6 +178,7 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
+            echo "$(pwd)"
             ansible-playbook -i inventory configure-server.yml -vvv
 
       - destroy-environment:
@@ -243,16 +244,14 @@ jobs:
           name: Get backend url
           command: |
             echo $(cat .circleci/ansible/inventory | sed 2d)
+            echo "$(pwd)"
             export BACKEND_IP=$(cat .circleci/ansible/inventory | sed 2d)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
             cat frontend/.env    
 
-      
-
-
-                                    
+                                       
 workflows:
   default:
     jobs:
