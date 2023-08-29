@@ -248,15 +248,14 @@ jobs:
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                 --output text)
-            echo "bla"
             echo $BACKEND_IP >> ./.circleci/ansible/inventory 
             cat ./.circleci/ansible/inventory
-            export BACKEND_IP=$(cat ./.circleci/ansible/inventory | sed -n '2p')
+            export BACKEND_IP=$(cat ./.circleci/ansible/inventory | sed 2d)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             mkdir -p frontend
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env  
-            cat frontend/.env    
+            echo "API_URL=http://${BACKEND_IP}:3030" > frontend/.env  
+            cat frontend/.env   
 
                                        
 workflows:
