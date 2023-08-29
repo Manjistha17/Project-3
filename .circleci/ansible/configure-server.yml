@@ -13,7 +13,6 @@
     - ansible_connection: ssh
     - ansible_stdout_callback: yaml
 
-  
 
   roles:
     - configure-server  

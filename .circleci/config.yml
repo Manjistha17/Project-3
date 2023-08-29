@@ -168,7 +168,6 @@ jobs:
           command: |
             apk update
             apk add --update ansible openssh
-            apk add --update ansible
             ansible --version
 
       - run:
