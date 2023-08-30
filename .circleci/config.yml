@@ -281,10 +281,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt -y update
-            apt install -y tar gzip curl unzip
-            apt install -y python3 python3-pip
-            python3 -m pip install --user ansible
+            sudo apt -y update
+            sudo apt install -y tar gzip curl unzip
+            sudo apt install -y python3 python3-pip
+            sudo python3 -m pip install --user ansible
       - run:
           name: Install aws-cli
           command: |
