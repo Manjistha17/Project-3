@@ -271,7 +271,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: circleci/node:14.17.6
+      - image: circleci/node:latest
     steps:
       - checkout
       - add_ssh_keys:
