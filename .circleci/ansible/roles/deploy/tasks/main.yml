@@ -6,13 +6,13 @@
     state: directory
     mode: 0755
 
-- name: "backend file copy"
+- name: "copy artifact"
   become: true
   copy:
     src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/backend
 
-- name: Unarchive backend files
+- name: Extract artifact files
   unarchive:
     src: /home/ubuntu/backend/artifact.tar.gz
     dest: /home/ubuntu/backend
@@ -31,16 +31,22 @@
     pm2 stop default
     pm2 start npm -- start
 
-  environment:
-    TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
-    TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR') }}"
-    TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES') }}"
-    TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS') }}"
-    TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
-    TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
-    TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
-    TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
-    TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+  - name: "exporting env variables"
+  become: yes  
+  shell:  |    
+    touch /etc/profile.d/env.sh
+    echo export TYPEORM_HOST=$TYPTYPEORM_HOST >> /etc/profile.d/env.sh
+    echo export TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> /etc/profile.d/env.sh
+    echo export TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> /etc/profile.d/env.sh
+    echo export TYPEORM_HOST=$TYPEORM_HOST >> /etc/profile.d/env.sh
+    echo export TYPEORM_PORT=$TYPEORM_PORT >> /etc/profile.d/env.sh
+    echo export TYPEORM_USERNAME=$TYPEORM_USERNAME >> /etc/profile.d/env.sh
+    echo export TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> /etc/profile.d/env.sh
+    echo export TYPEORM_DATABASE=$TYPEORM_DATABASE >> /etc/profile.d/env.sh
+    echo export TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> /etc/profile.d/env.sh
+    echo export TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> /etc/profile.d/env.sh
+    . /etc/environment
+    . ~/.bashrc
 
   register: execute_node
 
