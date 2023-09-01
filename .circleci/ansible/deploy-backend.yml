@@ -3,6 +3,7 @@
 - name: "configuration play." 
   hosts: web
   user: ubuntu
+  become: true
   gather_facts: false
   vars:
     - ansible_python_interpreter: /usr/bin/python3
@@ -13,6 +14,7 @@
   
 
     - name: "install python for Ansible."
+      become : yes
       apt:
         name: python3
         update_cache: yes
