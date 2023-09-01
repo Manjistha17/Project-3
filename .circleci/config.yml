@@ -302,10 +302,10 @@ jobs:
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
             apk add --update ansible curl rsync openssh nodejs npm
             ansible --version
+            pip install --upgrade pip
             pip install awscli
             aws --version
             cd backend  # Change to the backend directory
-            npm install --force
      
       - run:
           name: Compress Backend
