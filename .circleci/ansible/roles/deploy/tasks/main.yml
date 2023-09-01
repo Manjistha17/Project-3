@@ -9,8 +9,8 @@
 - name: "backend file copy"
   become: true
   copy:
-    src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/backend
+    src: ~/project/frontend/dist/artifact-${CIRCLE_WORKFLOW_ID:0:7}.tar.gz
+    dest: /home/ubuntu/backend/artifact.tar.gz
 
 - name: Unarchive backend files
   unarchive:
