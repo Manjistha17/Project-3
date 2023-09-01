@@ -304,7 +304,8 @@ jobs:
             ansible --version
             pip install awscli
             aws --version
-      
+            cd backend  # Change to the backend directory
+            npm install       
       - run:
           name: Compress Backend
           command: |
