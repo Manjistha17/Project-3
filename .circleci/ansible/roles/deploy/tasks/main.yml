@@ -9,7 +9,7 @@
 - name: "Copy backend files from CircleCI workspace"
   become: true
   copy:
-    src: "{{ workspace }}/backend"
+    src: "/home/circleci/project/frontend/dist"
     dest: /home/ubuntu/backend
   delegate_to: localhost
 
