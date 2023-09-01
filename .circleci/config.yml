@@ -225,7 +225,7 @@ jobs:
 
     environment:
       API_URL: ""  # Empty string as the default value 
-        
+
     steps:
       - checkout
       - run:
@@ -293,7 +293,7 @@ jobs:
             npm run build
             cd ..
             cd .circleci/ansible
-            echo "Contents  of the inventory file is -------"
+            echo "Inventory file : "
             cat inventory
             ansible-playbook -i inventory deploy-backend.yml           
     
@@ -323,6 +323,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]  
+      - deploy-backend:
+          requires: [run-migrations]    
       
       
              
