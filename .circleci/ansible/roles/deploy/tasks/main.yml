@@ -24,7 +24,7 @@
     npm i
     npm i -g pm2
 
-- name: "Executing Node app with PM2"
+- name: "Executing Node app with PM2" #this
   shell: |
     cd /home/ubuntu/backend
     npm install
