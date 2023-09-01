@@ -6,17 +6,12 @@
     state: directory
     mode: 0755
 
-- name: "backend file copy"
+- name: "Copy backend files from CircleCI workspace"
   become: true
   copy:
-    src: ~/project/frontend/dist/artifact-{{ CIRCLE_WORKFLOW_ID[:7] }}.tar.gz
+    src: "{{ workspace }}/backend"
     dest: /home/ubuntu/backend
-
-- name: Unarchive backend files
-  unarchive:
-    src: /home/ubuntu/backend/artifact.tar.gz
-    dest: /home/ubuntu/backend
-    copy: no
+  delegate_to: localhost
 
 - name: "Installing Node Dependencies"
   shell: |
