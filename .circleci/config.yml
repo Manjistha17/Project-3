@@ -222,6 +222,10 @@ jobs:
   deploy-frontend:
     docker:
       - image: circleci/node:13.8.0
+
+    environment:
+      API_URL: ""  # Empty string as the default value 
+        
     steps:
       - checkout
       - run:
