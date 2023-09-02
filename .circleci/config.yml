@@ -286,6 +286,10 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["fd:5e:93:0d:93:89:ff:12:ee:3a:d5:fc:1d:d2:bd:27"]
+      - run:
+        name: Set working directory to /home/ubuntu/backend
+        command: cd /home/ubuntu/backend
+            
       - attach_workspace:
           at: .
       - run:
