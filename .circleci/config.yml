@@ -287,10 +287,6 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["fd:5e:93:0d:93:89:ff:12:ee:3a:d5:fc:1d:d2:bd:27"]
 
-      - run:
-          name: Set working directory to /home/ubuntu/backend
-          command: cd /home/ubuntu/backend
-
       - attach_workspace:
           at: .
       - run:
@@ -363,6 +359,7 @@ jobs:
             BACKEND_IP=$(echo "$BACKEND_IP" | tr -d '[:space:]')
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
+            cd /home/ubuntu/backend
             if curl "${API_URL}/api/status" | grep "ok"
             then
               return 0
