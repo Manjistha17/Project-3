@@ -305,7 +305,8 @@ jobs:
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail   
-      - revert-migrations
+          
+      - revert_migrations
 
 
   deploy-backend:
