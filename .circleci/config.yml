@@ -29,7 +29,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure https://kvdb.io/UafN7LHaBAQ7N5bNtXHfbj/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            
+            echo $SUCCESS
             if (( $SUCCESS == 1 ));
             then
              cd ~/project/backend
@@ -263,6 +263,8 @@ jobs:
 
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
@@ -305,7 +307,7 @@ jobs:
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail   
-          
+
       - revert_migrations
 
 
@@ -408,10 +410,7 @@ jobs:
              else
                  return 1
              fi      
-     
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail        
+           
           
       - revert_migrations 
                                        
