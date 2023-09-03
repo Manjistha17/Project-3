@@ -216,7 +216,7 @@ jobs:
   run-migrations:
     docker:
       # Select proper image
-      - image: circleci/node:14.17.6
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -231,6 +231,7 @@ jobs:
             npm install
             npm run migrations > migrations_log.txt 
             cat migrations_log.txt
+            cat .env
       - run:
           name: Send migration status to kvdb.io
           command: |
