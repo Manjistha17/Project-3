@@ -238,7 +238,7 @@ jobs:
       - run:
           name: Check Migration Status
           command: |
-            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_log.txt
             then
               echo "Migration executed successfully"
               curl https://kvdb.io/XxBcBNhfFbtVNeqcJ6byw5/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
