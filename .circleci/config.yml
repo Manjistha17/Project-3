@@ -271,30 +271,32 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
+
       - run:
-          name: Get backend url
+          name: Get backend URL and deploy frontend
           command: |
             BACKEND_IP=$(aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                 --output text | grep -v '\[web\]')
-            echo $BACKEND_IP >> ./.circleci/ansible/inventory 
+            echo $BACKEND_IP >> ./.circleci/ansible/inventory
             cat ./.circleci/ansible/inventory
             BACKEND_IP=$(echo "$BACKEND_IP" | tr -d '[:space:]')
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
+
             mkdir -p frontend
             echo NODE_ENV=production >> "frontend/.env"
-            echo ${API_URL} > frontend/.env  
-      - run:
-          name: Deploy frontend objects
-          command: |
+            echo "API_URL=${API_URL}" >> "frontend/.env"
+
             cd frontend
             npm install
             npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist 
-            aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive 
-            echo "Deployed objects path: $(pwd)/dist"
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+
+            aws s3 cp ./artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}"
+
+            echo "Deployed objects path: $(pwd)/dist" 
 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
