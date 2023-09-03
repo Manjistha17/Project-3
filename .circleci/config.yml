@@ -285,14 +285,13 @@ jobs:
             echo "API_URL = ${API_URL}"
             mkdir -p frontend
             echo NODE_ENV=production >> "frontend/.env"
-            echo API_URL=$API_URL >> "frontend/.env" 
+            echo ${API_URL} > frontend/.env  
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
             npm install
             npm run build
-            npm audit fix --audit-level=critical --force
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist 
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive 
             echo "Deployed objects path: $(pwd)/dist"
@@ -399,7 +398,7 @@ jobs:
              echo ${URL} 
              if curl -s ${URL} | grep "Welcome"
              then
-                 return 0
+                 return 1
              else
                  return 1
              fi      
@@ -407,7 +406,8 @@ jobs:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail        
           
-      - revert_migrations 
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}" 
 
   cloudfront-update:
     docker:
