@@ -127,6 +127,7 @@ jobs:
           name : scan backend
           command: |
             cd backend
+            npm install
             npm audit fix --audit-level=critical --force
      
   deploy-infrastructure:
@@ -310,6 +311,12 @@ jobs:
 
             echo "Deployed objects path: $(pwd)/dist" 
 
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail
+
+      - revert_migrations        
+
       
 
 
@@ -413,6 +420,11 @@ jobs:
              else
                  return 1
              fi      
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail
+
+      - revert_migrations         
       
 
   cloudfront-update:
